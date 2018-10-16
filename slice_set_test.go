@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	testsize = 10
+	testsize = 500
 )
 
 var (
@@ -137,57 +137,65 @@ func BenchmarkHybridSliceSetGet(b *testing.B) {
 	}
 }
 
-// func BenchmarkMapDelete(b *testing.B) {
-// 	m := make(map[string]struct{})
+func BenchmarkMapDelete(b *testing.B) {
+	m := make(map[string]struct{})
 
-// 	for i := 0; i < testsize; i++ {
-// 		m[strconv.Itoa(i)] = struct{}{}
-// 	}
+	for i := 0; i < testsize; i++ {
+		m[strconv.Itoa(i)] = struct{}{}
+	}
 
-// 	b.ResetTimer()
-// 	for i := 0; i < b.N; i++ {
-// 		delete(m, strconv.Itoa(i))
-// 	}
-// }
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < testsize; j++ {
+			delete(m, strconv.Itoa(i))
+		}
+	}
+}
 
-// func BenchmarkSliceSetDelete(b *testing.B) {
-// 	m := sliceset.LinearSliceset{}
+func BenchmarkSliceSetDelete(b *testing.B) {
+	m := sliceset.LinearSliceset{}
 
-// 	for i := 0; i < testsize; i++ {
-// 		m.Insert(strconv.Itoa(i))
-// 	}
+	for i := 0; i < testsize; i++ {
+		m.Insert(strconv.Itoa(i))
+	}
 
-// 	b.ResetTimer()
-// 	for i := 0; i < b.N; i++ {
-// 		m.Delete(strconv.Itoa(i))
-// 	}
-// }
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < testsize; j++ {
+			m.Delete(strconv.Itoa(i))
+		}
+	}
+}
 
-// func BenchmarkBinarySliceSetDelete(b *testing.B) {
-// 	m := sliceset.BinarySliceset{}
+func BenchmarkBinarySliceSetDelete(b *testing.B) {
+	m := sliceset.BinarySliceset{}
 
-// 	for i := 0; i < testsize; i++ {
-// 		m.Insert(strconv.Itoa(i))
-// 	}
+	for i := 0; i < testsize; i++ {
+		m.Insert(strconv.Itoa(i))
+	}
 
-// 	b.ResetTimer()
-// 	for i := 0; i < b.N; i++ {
-// 		m.Delete(strconv.Itoa(i))
-// 	}
-// }
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < testsize; j++ {
+			m.Delete(strconv.Itoa(i))
+		}
+	}
+}
 
-// func BenchmarkHybridSliceSetDelete(b *testing.B) {
-// 	m := sliceset.NewHybridSet(0)
+func BenchmarkHybridSliceSetDelete(b *testing.B) {
+	m := sliceset.NewHybridSet(0)
 
-// 	for i := 0; i < testsize; i++ {
-// 		m.Insert(strconv.Itoa(i))
-// 	}
+	for i := 0; i < testsize; i++ {
+		m.Insert(strconv.Itoa(i))
+	}
 
-// 	b.ResetTimer()
-// 	for i := 0; i < b.N; i++ {
-// 		m.Delete(strconv.Itoa(i))
-// 	}
-// }
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < testsize; j++ {
+			m.Delete(strconv.Itoa(i))
+		}
+	}
+}
 
 func BenchmarkMapRange(b *testing.B) {
 	m := make(map[string]struct{})

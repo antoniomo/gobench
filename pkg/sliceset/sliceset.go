@@ -1,6 +1,8 @@
 package sliceset
 
-import "sort"
+import (
+	"sort"
+)
 
 // After seen the talk at https://www.youtube.com/watch?v=jEG4Qyo_4Bc I wanted
 // to check the performance of set-type interface built over a slice, for small
@@ -119,7 +121,7 @@ func (hs *HybridSet) Insert(val string) {
 		return
 	}
 	hs.Slice = append(hs.Slice, val) // Append at the end
-	hs.Set[val] = len(hs.Slice)
+	hs.Set[val] = len(hs.Slice) - 1
 }
 
 // IsMember ...
@@ -129,22 +131,18 @@ func (hs *HybridSet) IsMember(val string) bool {
 }
 
 // Delete ...
-// https://github.com/golang/go/wiki/SliceTricks#delete-without-preserving-order
+// https://github.com/golang/go/wiki/SliceTricks#delete
 func (hs *HybridSet) Delete(val string) {
 	idx, ok := hs.Set[val]
 	if !ok {
 		return
 	}
-	// If only it was this easy... map indexes would move with this method
-	// so this is wrong :D
-	// Ideas:
-	// - Waste more memory with a slice of empty slice positions, so the
-	// slice only grows if there hasn't been deletes, but still it would
-	// never shrink with this by itself. We could shrink it if the empties
-	// slice grows over a max empty size.
 	delete(hs.Set, val)
-	hs.Slice[idx] = hs.Slice[len(hs.Slice)-1]
-	hs.Slice = hs.Slice[:len(hs.Slice)-1]
+	// Sad, sad...
+	for i, v := range hs.Slice[idx+1 : len(hs.Slice)] {
+		hs.Set[v] = i
+	}
+	hs.Slice = append(hs.Slice[:idx], hs.Slice[idx+1:]...)
 }
 
 // Snapshot ...
