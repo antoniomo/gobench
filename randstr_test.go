@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"testing"
 
+	// Proposed math/rand replacement
+	// https://github.com/golang/go/issues/21835
 	xrand "golang.org/x/exp/rand"
 )
 
