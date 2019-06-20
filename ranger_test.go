@@ -1,6 +1,9 @@
 package cmap
 
 import (
+	"bytes"
+	"encoding/gob"
+	"encoding/json"
 	"strconv"
 	"sync"
 	"testing"
@@ -116,6 +119,56 @@ func BenchmarkSnapshot100(b *testing.B) {
 		l.RLock()
 		sn := append(a[:0:0], a...)
 		l.RUnlock()
+		for _, s := range sn {
+			_ = s
+		}
+	}
+}
+
+func BenchmarkJsonSnapshot100(b *testing.B) {
+
+	// Setup
+	var (
+		a []string
+		l sync.RWMutex
+	)
+	for i := 0; i < 100; i++ {
+		a = append(a, strconv.Itoa(i))
+	}
+
+	for i := 0; i < b.N; i++ {
+		l.RLock()
+		b, _ := json.Marshal(a)
+		l.RUnlock()
+		var sn []string
+		json.Unmarshal(b, &sn)
+		for _, s := range sn {
+			_ = s
+		}
+	}
+}
+
+func BenchmarkGobSnapshot100(b *testing.B) {
+
+	// Setup
+	var (
+		a []string
+		l sync.RWMutex
+	)
+	for i := 0; i < 100; i++ {
+		a = append(a, strconv.Itoa(i))
+	}
+
+	for i := 0; i < b.N; i++ {
+		var buf bytes.Buffer
+		enc := gob.NewEncoder(&buf)
+		l.RLock()
+		enc.Encode(a)
+		l.RUnlock()
+		r := bytes.NewReader(buf.Bytes())
+		dec := gob.NewDecoder(r)
+		var sn []string
+		dec.Decode(sn)
 		for _, s := range sn {
 			_ = s
 		}
@@ -273,6 +326,58 @@ func BenchmarkSnapshotMap100(b *testing.B) {
 			sn[k] = v
 		}
 		l.RUnlock()
+		for _, s := range sn {
+			_ = s
+		}
+	}
+}
+
+func BenchmarkJsonSnapshotMap100(b *testing.B) {
+
+	// Setup
+	var (
+		m = make(map[string]string)
+		l sync.RWMutex
+	)
+	for i := 0; i < 100; i++ {
+		s := strconv.Itoa(i)
+		m[s] = s
+	}
+
+	for i := 0; i < b.N; i++ {
+		l.RLock()
+		b, _ := json.Marshal(m)
+		l.RUnlock()
+		var sn map[string]string
+		json.Unmarshal(b, &sn)
+		for _, s := range sn {
+			_ = s
+		}
+	}
+}
+
+func BenchmarkGobSnapshotMap100(b *testing.B) {
+
+	// Setup
+	var (
+		m = make(map[string]string)
+		l sync.RWMutex
+	)
+	for i := 0; i < 100; i++ {
+		s := strconv.Itoa(i)
+		m[s] = s
+	}
+
+	for i := 0; i < b.N; i++ {
+		var buf bytes.Buffer
+		enc := gob.NewEncoder(&buf)
+		l.RLock()
+		enc.Encode(m)
+		l.RUnlock()
+		r := bytes.NewReader(buf.Bytes())
+		dec := gob.NewDecoder(r)
+		var sn []string
+		dec.Decode(sn)
 		for _, s := range sn {
 			_ = s
 		}
