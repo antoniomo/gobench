@@ -14,6 +14,7 @@ const maxrangebuf = 10
 func sliceranger(l *sync.RWMutex, s []string) <-chan string {
 	ch := make(chan string)
 
+	// This goroutine leaks if the slice isn't fully ranged
 	go func() {
 		l.RLock()
 		defer l.RUnlock()
@@ -28,6 +29,7 @@ func sliceranger(l *sync.RWMutex, s []string) <-chan string {
 	return ch
 }
 
+// This goroutine leaks if the slice isn't fully ranged
 func slicerangerbuf(l *sync.RWMutex, s []string) <-chan string {
 	ch := make(chan string, maxrangebuf)
 
@@ -214,6 +216,7 @@ func BenchmarkSlicerangerBuf100(b *testing.B) {
 func mapranger(l *sync.RWMutex, m map[string]string) <-chan string {
 	ch := make(chan string)
 
+	// This goroutine leaks if the map isn't fully ranged
 	go func() {
 		l.RLock()
 		defer l.RUnlock()
@@ -231,6 +234,7 @@ func mapranger(l *sync.RWMutex, m map[string]string) <-chan string {
 func maprangerbuf(l *sync.RWMutex, m map[string]string) <-chan string {
 	ch := make(chan string, maxrangebuf)
 
+	// This goroutine leaks if the map isn't fully ranged
 	go func() {
 		l.RLock()
 		defer l.RUnlock()
@@ -324,6 +328,35 @@ func BenchmarkSnapshotMap100(b *testing.B) {
 		sn := make(map[string]string, len(m))
 		for k, v := range m {
 			sn[k] = v
+		}
+		l.RUnlock()
+		for _, s := range sn {
+			_ = s
+		}
+	}
+}
+
+func BenchmarkSnapshotMapAsSlice100(b *testing.B) {
+
+	// Setup
+	var (
+		m = make(map[string]string)
+		l sync.RWMutex
+	)
+	for i := 0; i < 100; i++ {
+		s := strconv.Itoa(i)
+		m[s] = s
+	}
+
+	for i := 0; i < b.N; i++ {
+		var (
+			sn = make([]string, len(m))
+			i  int
+		)
+		l.RLock()
+		for _, v := range m {
+			sn[i] = v
+			i++
 		}
 		l.RUnlock()
 		for _, s := range sn {
