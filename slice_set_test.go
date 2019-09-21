@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	testsize = 500
+	testsize = 100000
 )
 
 var (
@@ -33,27 +33,27 @@ func BenchmarkMapInsertNew(b *testing.B) {
 	}
 }
 
-func BenchmarkSliceSetInsertNew(b *testing.B) {
-	m := sliceset.LinearSliceset{}
+// func BenchmarkSliceSetInsertNew(b *testing.B) {
+// 	m := sliceset.LinearSliceset{}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			m.Insert(strconv.Itoa(testset[j]))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			m.Insert(strconv.Itoa(testset[j]))
+// 		}
+// 	}
+// }
 
-func BenchmarkBinarySliceSetInsertNew(b *testing.B) {
-	m := sliceset.BinarySliceset{}
+// func BenchmarkBinarySliceSetInsertNew(b *testing.B) {
+// 	m := sliceset.BinarySliceset{}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			m.Insert(strconv.Itoa(testset[j]))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			m.Insert(strconv.Itoa(testset[j]))
+// 		}
+// 	}
+// }
 
 func BenchmarkHybridSliceSetInsertNew(b *testing.B) {
 	m := sliceset.NewHybridSet(0)
@@ -92,35 +92,35 @@ func BenchmarkMapGet(b *testing.B) {
 	}
 }
 
-func BenchmarkSliceSetGet(b *testing.B) {
-	m := sliceset.LinearSliceset{}
+// func BenchmarkSliceSetGet(b *testing.B) {
+// 	m := sliceset.LinearSliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			ok = m.IsMember(strconv.Itoa(testset[j]))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			ok = m.IsMember(strconv.Itoa(testset[j]))
+// 		}
+// 	}
+// }
 
-func BenchmarkBinarySliceSetGet(b *testing.B) {
-	m := sliceset.BinarySliceset{}
+// func BenchmarkBinarySliceSetGet(b *testing.B) {
+// 	m := sliceset.BinarySliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			ok = m.IsMember(strconv.Itoa(testset[j]))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			ok = m.IsMember(strconv.Itoa(testset[j]))
+// 		}
+// 	}
+// }
 
 func BenchmarkHybridSliceSetGet(b *testing.B) {
 	m := sliceset.NewHybridSet(0)
@@ -152,35 +152,35 @@ func BenchmarkMapDelete(b *testing.B) {
 	}
 }
 
-func BenchmarkSliceSetDelete(b *testing.B) {
-	m := sliceset.LinearSliceset{}
+// func BenchmarkSliceSetDelete(b *testing.B) {
+// 	m := sliceset.LinearSliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			m.Delete(strconv.Itoa(i))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			m.Delete(strconv.Itoa(i))
+// 		}
+// 	}
+// }
 
-func BenchmarkBinarySliceSetDelete(b *testing.B) {
-	m := sliceset.BinarySliceset{}
+// func BenchmarkBinarySliceSetDelete(b *testing.B) {
+// 	m := sliceset.BinarySliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
 
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < testsize; j++ {
-			m.Delete(strconv.Itoa(i))
-		}
-	}
-}
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		for j := 0; j < testsize; j++ {
+// 			m.Delete(strconv.Itoa(i))
+// 		}
+// 	}
+// }
 
 func BenchmarkHybridSliceSetDelete(b *testing.B) {
 	m := sliceset.NewHybridSet(0)
@@ -212,35 +212,35 @@ func BenchmarkMapRange(b *testing.B) {
 	}
 }
 
-func BenchmarkSliceSetRange(b *testing.B) {
-	m := sliceset.LinearSliceset{}
+// func BenchmarkSliceSetRange(b *testing.B) {
+// 	m := sliceset.LinearSliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
-	b.ResetTimer()
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		for _, key := range m {
-			k = key
-		}
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		for _, key := range m {
+// 			k = key
+// 		}
+// 	}
+// }
 
-func BenchmarkBinarySliceSetRange(b *testing.B) {
-	m := sliceset.BinarySliceset{}
+// func BenchmarkBinarySliceSetRange(b *testing.B) {
+// 	m := sliceset.BinarySliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
-	b.ResetTimer()
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		for _, key := range m {
-			k = key
-		}
-	}
-}
+// 	for i := 0; i < b.N; i++ {
+// 		for _, key := range m {
+// 			k = key
+// 		}
+// 	}
+// }
 
 func BenchmarkHybridSliceSetRange(b *testing.B) {
 	m := sliceset.NewHybridSet(0)
@@ -276,36 +276,38 @@ func BenchmarkMapSnapshotRange(b *testing.B) {
 	}
 }
 
-func BenchmarkLinearSliceSetSnapshotRange(b *testing.B) {
-	m := sliceset.LinearSliceset{}
+// func BenchmarkLinearSliceSetSnapshotRange(b *testing.B) {
+// 	m := sliceset.LinearSliceset{}
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
-	b.ResetTimer()
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
+// 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		snapshot := m.Snapshot()
-		for _, key := range snapshot {
-			k = key
-		}
-	}
-}
-func BenchmarkBinarySliceSetSnapshotRange(b *testing.B) {
-	m := sliceset.BinarySliceset{}
+// 	for i := 0; i < b.N; i++ {
+// 		snapshot := m.Snapshot()
+// 		for _, key := range snapshot {
+// 			k = key
+// 		}
+// 	}
+// }
 
-	for i := 0; i < testsize; i++ {
-		m.Insert(strconv.Itoa(i))
-	}
-	b.ResetTimer()
+// func BenchmarkBinarySliceSetSnapshotRange(b *testing.B) {
+// 	m := sliceset.BinarySliceset{}
 
-	for i := 0; i < b.N; i++ {
-		snapshot := m.Snapshot()
-		for _, key := range snapshot {
-			k = key
-		}
-	}
-}
+// 	for i := 0; i < testsize; i++ {
+// 		m.Insert(strconv.Itoa(i))
+// 	}
+// 	b.ResetTimer()
+
+// 	for i := 0; i < b.N; i++ {
+// 		snapshot := m.Snapshot()
+// 		for _, key := range snapshot {
+// 			k = key
+// 		}
+// 	}
+// }
+
 func BenchmarkHybridSnapshotRange(b *testing.B) {
 	m := sliceset.NewHybridSet(0)
 
